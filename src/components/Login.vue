@@ -19,7 +19,9 @@
   </div>
 </template>
 <script>
+import { login } from '@/api/api.js';
 export default {
+  name: 'Login',
   data() {
     return {
       form: {
@@ -34,13 +36,32 @@ export default {
       },
     };
   },
+
   methods: {
     login(form) {
       this.$refs[form].validate((valid) => {
         if (valid) {
-          console.log(this.form);
-          this.$message({ message: '登录成功', type: 'success' });
-          this.$router.push('/home');
+          //发送请求
+          login(this.form)
+            .then((res) => {
+              if (res.data.status === 200) {
+                this.$message({
+                  message: '登录成功',
+                  type: 'success',
+                });
+                //使用封装的token方法保存token
+                this.$token.setToken('token', res.data.token);
+                // 储存username
+                this.$token.setToken('username', res.data.username);
+                //跳转到首页
+                this.$router.push('/home');
+              } else {
+                this.$message.error(res.data.msg);
+              }
+            })
+            .catch((err) => {
+              this.$message.error(err);
+            });
         } else {
           return false;
         }
