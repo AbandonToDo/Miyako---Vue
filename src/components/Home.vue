@@ -5,7 +5,10 @@
       <SideMenu />
       <el-container>
         <!-- <router-view /> -->
-        <el-main><router-view></router-view></el-main>
+        <el-main>
+          <BreadCrumb />
+          <router-view></router-view>
+        </el-main>
         <el-footer><Footer /></el-footer>
       </el-container>
     </el-container>
@@ -13,9 +16,10 @@
 </template>
 
 <script lang="ts">
-import Header from './common/Header.vue';
-import Footer from './common/Footer.vue';
-import SideMenu from './common/SideMenu.vue';
+import Header from './common/Header.vue'
+import Footer from './common/Footer.vue'
+import SideMenu from './common/SideMenu.vue'
+import BreadCrumb from './common/Breadcrumb.vue'
 export default {
   name: 'Home',
 
@@ -23,8 +27,9 @@ export default {
     Header,
     Footer,
     SideMenu,
-  },
-};
+    BreadCrumb
+  }
+}
 </script>
 
 <style scoped>

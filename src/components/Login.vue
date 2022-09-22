@@ -19,22 +19,22 @@
   </div>
 </template>
 <script>
-import { login } from '@/api/api.js';
+import { login } from '@/api/api.js'
 export default {
   name: 'Login',
   data() {
     return {
       form: {
         username: '',
-        password: '',
+        password: ''
       },
       rules: {
         username: [
           { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 4, max: 6, message: '请输入4-6位', trigger: 'blur' },
-        ],
-      },
-    };
+          { min: 4, max: 6, message: '请输入4-6位', trigger: 'blur' }
+        ]
+      }
+    }
   },
 
   methods: {
@@ -47,27 +47,28 @@ export default {
               if (res.data.status === 200) {
                 this.$message({
                   message: '登录成功',
-                  type: 'success',
-                });
+                  type: 'success'
+                })
                 //使用封装的token方法保存token
-                this.$token.setToken('token', res.data.token);
+                this.$token.setToken('token', res.data.token)
                 // 储存username
-                this.$token.setToken('username', res.data.username);
+                this.$token.setToken('username', res.data.username)
+
                 //跳转到首页
-                this.$router.push('/home');
+                this.$router.push('/home')
               } else {
-                this.$message.error(res.data.msg);
+                this.$message.error(res.data.msg)
               }
             })
             .catch((err) => {
-              this.$message.error(err);
-            });
+              this.$message.error(err)
+            })
         } else {
-          return false;
+          return false
         }
-      });
-    },
-  },
-};
+      })
+    }
+  }
+}
 </script>
 <style lang="scss"></style>

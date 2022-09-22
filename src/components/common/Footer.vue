@@ -1,8 +1,8 @@
 <template>
-  <div class="footer">footer</div>
+  <el-card><div class="footer">footer</div></el-card>
 </template>
 <script>
-export default {};
+export default {}
 </script>
 <style scoped>
 .footer {

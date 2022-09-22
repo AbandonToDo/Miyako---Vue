@@ -14,7 +14,10 @@
             <i :class="item.iconCls"></i>
             <span>{{ item.name }}</span>
           </template>
-          <el-menu-item-group v-for="(child, index) in item.children" :key="index">
+          <el-menu-item-group
+            v-for="(child, index) in item.children"
+            :key="index"
+          >
             <el-menu-item :index="child.path">
               <i :class="child.iconCls"></i>
               {{ child.name }}
@@ -29,14 +32,16 @@
 export default {
   data() {
     return {
-      menus: [],
-    };
+      menus: []
+    }
   },
   // 获取路由配置
   created() {
-    this.menus = JSON.parse(JSON.stringify(this.$router.options.routes));
-  },
-};
+    this.menus = JSON.parse(JSON.stringify(this.$router.options.routes))
+    console.log(this.$route)
+    console.log(this.$router)
+  }
+}
 </script>
 <style scoped>
 .el-aside,
@@ -48,5 +53,11 @@ export default {
 }
 .fa {
   margin-right: 8px;
+}
+.el-menu-item {
+  margin-left: 20px;
+}
+::-webkit-scrollbar {
+  display: none;
 }
 </style>
