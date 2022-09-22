@@ -26,7 +26,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #409eff;
+  background: #545c64;
   color: #fff;
 }
 </style>

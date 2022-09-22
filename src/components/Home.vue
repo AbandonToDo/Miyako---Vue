@@ -5,7 +5,7 @@
       <SideMenu />
       <el-container>
         <!-- <router-view /> -->
-        <el-main>main</el-main>
+        <el-main><router-view></router-view></el-main>
         <el-footer><Footer /></el-footer>
       </el-container>
     </el-container>
@@ -17,6 +17,8 @@ import Header from './common/Header.vue';
 import Footer from './common/Footer.vue';
 import SideMenu from './common/SideMenu.vue';
 export default {
+  name: 'Home',
+
   components: {
     Header,
     Footer,
