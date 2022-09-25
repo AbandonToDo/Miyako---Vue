@@ -24,9 +24,19 @@ export function deleteStudent(id) {
   });
 }
 // 学生详细信息列表
-export function getStudentInfo() {
+export function getStudentInfo(params) {
   return service({
     url: '/info',
     method: 'get',
+    params,
+  });
+}
+
+// 增加学生信息
+export function addStudentInfo(data) {
+  return service({
+    url: '/info',
+    method: 'post',
+    data,
   });
 }
