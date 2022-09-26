@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-button type="primary" @click="handleDialogFormVisible" size="normal">新增</el-button>
-    <el-dialog title="新增学生信息" :visible.sync="dialogFormVisible">
+    <el-dialog :title="state ? '新增学生信息' : '修改学生信息'" :visible.sync="dialogFormVisible">
       <el-form :model="form" ref="form" :rules="rules">
         <el-form-item label="学生姓名" :label-width="formLabelWidth" prop="name">
           <el-input v-model="form.name" label="学生姓名"></el-input>
@@ -56,7 +56,7 @@
             type="danger"
             size="small"
             icon="el-icon-edit"
-            @click="handleEdit(ele.row.id)"
+            @click="handleEdit(ele.row)"
           ></el-button>
           <el-button
             type="danger"
@@ -70,10 +70,11 @@
   </div>
 </template>
 <script>
-import { getStudentInfo, addStudentInfo } from '@/api/api';
+import { APIStudentInfo } from '@/api/api';
 export default {
   data() {
     return {
+      state: true,
       compTableData: [],
       dialogFormVisible: false,
       formLabelWidth: '80px',
@@ -101,11 +102,6 @@ export default {
             required: true,
             message: '请输入手机号码',
           },
-
-          {
-            pattern: /^1[3456789]\d{9}$/,
-            message: '请输入正确的手机号码',
-          },
         ],
       },
     };
@@ -115,7 +111,7 @@ export default {
   },
   methods: {
     getInfo() {
-      getStudentInfo().then((res) => {
+      APIStudentInfo('/info', 'get').then((res) => {
         this.compTableData = res.data.data;
         this.compTableData.forEach((item) => {
           item.sex === '1' ? (item.sex_text = '男') : (item.sex_text = '女');
@@ -123,19 +119,34 @@ export default {
       });
     },
     handleDialogFormVisible() {
-      this.dialogFormVisible = true;
+      (this.form = {
+        name: '',
+        age: '',
+        sex: '1',
+        father: '',
+        mather: '',
+        time: '',
+        address: '',
+        phone: '',
+      }),
+        (this.dialogFormVisible = true);
+      this.state = true;
     },
+
     handleSure(form) {
-      console.log(this.form, form);
       this.$refs[form].validate((valid) => {
         if (valid) {
-          addStudentInfo(this.form).then((res) => {
+          let api = this.state
+            ? APIStudentInfo('/info', 'post', this.form)
+            : APIStudentInfo('/info', 'put', this.form);
+          api.then((res) => {
             if (res.data.status === 200) {
               this.$message({
                 message: '添加成功',
                 type: 'success',
               });
               this.getInfo();
+              this.$refs[form].resetFields();
               this.dialogFormVisible = false;
             } else {
               this.$message({
@@ -150,20 +161,32 @@ export default {
         }
       });
     },
-    handleEdit(id) {
-      this.$router.push({ path: '/student/edit', query: { id: id } });
+    handleEdit(rowData) {
+      this.dialogFormVisible = true;
+      const copyRowData = JSON.parse(JSON.stringify(rowData));
+      this.form = copyRowData;
+      this.state = false;
     },
     handleDelete(id) {
-      console.log(id);
-      this.$confirm('此操作将永久删除该学生信息, 是否继续?', '提示', {
+      this.$confirm('此操作将永久删除数据, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
       })
         .then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!',
+          APIStudentInfo(`/info/${id}`, 'delete').then((res) => {
+            if (res.data.status === 200) {
+              this.$message({
+                message: '删除成功',
+                type: 'success',
+              });
+              this.getInfo();
+            } else {
+              this.$message({
+                message: '删除失败',
+                type: 'error',
+              });
+            }
           });
         })
         .catch(() => {
